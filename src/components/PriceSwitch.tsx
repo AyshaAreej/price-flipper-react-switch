@@ -1,28 +1,47 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
-type PriceSwitchProps = {
+export type PriceSwitchProps = {
   onChange: (isYearly: boolean) => void;
   isYearly: boolean;
+  title?: string;
+  subtitle?: string;
+  monthlyLabel?: string;
+  yearlyLabel?: string;
+  discountLabel?: string;
+  discountPercentage?: number;
+  className?: string;
+  switchClassName?: string;
 }
 
-const PriceSwitch: React.FC<PriceSwitchProps> = ({ onChange, isYearly }) => {
+const PriceSwitch: React.FC<PriceSwitchProps> = ({ 
+  onChange, 
+  isYearly,
+  title = "Simple, transparent pricing",
+  subtitle = "Choose the plan that works best for you and your team",
+  monthlyLabel = "Monthly",
+  yearlyLabel = "Yearly",
+  discountLabel = "Save",
+  discountPercentage = 20,
+  className,
+  switchClassName
+}) => {
   return (
-    <div className="flex flex-col items-center justify-center mb-12">
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold mb-3">Simple, transparent pricing</h2>
-        <p className="text-gray-600 max-w-md mx-auto">
-          Choose the plan that works best for you and your team
-        </p>
-      </div>
+    <div className={cn("flex flex-col items-center justify-center mb-12", className)}>
+      {(title || subtitle) && (
+        <div className="text-center mb-6">
+          {title && <h2 className="text-3xl font-bold mb-3">{title}</h2>}
+          {subtitle && <p className="text-gray-600 max-w-md mx-auto">{subtitle}</p>}
+        </div>
+      )}
       
-      <div className="flex items-center space-x-3">
+      <div className={cn("flex items-center space-x-3", switchClassName)}>
         <span className={cn(
           "text-sm font-medium transition-colors duration-200",
           isYearly ? "text-gray-500" : "text-gray-900"
         )}>
-          Monthly
+          {monthlyLabel}
         </span>
         
         <button 
@@ -44,11 +63,13 @@ const PriceSwitch: React.FC<PriceSwitchProps> = ({ onChange, isYearly }) => {
             "text-sm font-medium transition-colors duration-200",
             isYearly ? "text-gray-900" : "text-gray-500"
           )}>
-            Yearly
+            {yearlyLabel}
           </span>
-          <span className="ml-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-            Save 20%
-          </span>
+          {discountPercentage > 0 && (
+            <span className="ml-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+              {discountLabel} {discountPercentage}%
+            </span>
+          )}
         </div>
       </div>
     </div>
